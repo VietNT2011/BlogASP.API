@@ -1,4 +1,4 @@
-﻿namespace BlogASP.API.Repository
+﻿namespace BlogASP.API.Repository.Interfaces
 {
     public interface IRepository<T> where T : class
     {

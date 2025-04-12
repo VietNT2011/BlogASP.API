@@ -1,10 +1,10 @@
-﻿
+﻿using BlogASP.API.Repository.Interfaces;
 using BlogASP.API.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace BlogASP.API.Repository
+namespace BlogASP.API.Repository.Implements
 {
     public class Repository<T> : IRepository<T> where T : class
     {
