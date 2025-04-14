@@ -38,7 +38,7 @@ namespace BlogASP.API.Controllers
             // Create a new User
             var newUser = new User
             {
-                Username = model.Username,
+                UserName = model.Username,
                 Email = model.Email,
                 PasswordHash = hashedPassword
             };
@@ -71,12 +71,13 @@ namespace BlogASP.API.Controllers
             var expirationMinutes = jwtSettings["ExpirationMinutes"]!;
 
             // Generate JWT token
-            var token = JwtTokenHelper.GenerateJwtToken(_configuration, user.UserId, user.Username);
+            var token = JwtTokenHelper.GenerateJwtToken(_configuration, user.UserId, user.UserName);
 
             // Create the response DTO
             var response = new LoginResponseDTO
             {
                 UserId = user.UserId,
+                UserName = user.UserName,
                 AccessToken = token,
                 ExpirationMinutes = expirationMinutes
             };

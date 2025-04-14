@@ -11,16 +11,36 @@ namespace BlogASP.API.Repository.Implements
         public readonly IMongoCollection<T> _collection;
         public Repository(IOptions<MongoDbSettings> settings)
         {
+            try
+            {
+                // Instance of Mongo Client
+                var client = new MongoClient(settings.Value.ConnectionString);
 
-            // Instance of Mongo Client
-            var client = new MongoClient(settings.Value.ConnectionString);
+                // Database instance
+                var database = client.GetDatabase(settings.Value.DatabaseName);
 
-            // Database instance
-            var database = client.GetDatabase(settings.Value.DatabaseName);
+                // Collection from the database
+                _collection = database.GetCollection<T>(typeof(T).Name);
 
-            // Collection from the database
-            _collection = database.GetCollection<T>(typeof(T).Name);
+                Console.WriteLine("Connected to MongoDB successfully.");
+            }
+            catch (MongoConfigurationException ex)
+            {
+                Console.WriteLine($"MongoDB Configuration Error: {ex.Message}");
+                throw;
+            }
+            catch (MongoConnectionException ex)
+            {
+                Console.WriteLine($"MongoDB Connection Error: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+                throw;
+            }
         }
+
 
         // Retrieves all documents from the collection
         public async Task<IEnumerable<T>> GetAllAsync()

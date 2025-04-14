@@ -13,8 +13,8 @@ namespace BlogASP.API.Repository.Implements
         // Retrieves posts that belong to a specific category
         public async Task<IEnumerable<Post>> GetPostsByCategoryIdAsync(string categoryId)
         {
-            // Filter to match posts containing the specified CategoryId
-            var filter = Builders<Post>.Filter.AnyEq(p => p.CategoryIds, categoryId);
+            // Filter to match posts containing the specified CategoryId in their Categories list
+            var filter = Builders<Post>.Filter.ElemMatch(p => p.Categories, c => c.CategoryId == categoryId);
 
             // Fetch all posts matching the filter
             return await _collection.Find(filter).ToListAsync();
@@ -24,7 +24,7 @@ namespace BlogASP.API.Repository.Implements
         public async Task<IEnumerable<Post>> GetPostsByAuthorIdAsync(string authorId)
         {
             // Filter to match posts with the specified AuthorId
-            var filter = Builders<Post>.Filter.Eq(p => p.AuthorId, authorId);
+            var filter = Builders<Post>.Filter.Eq(p => p.Author.UserId, authorId);
 
             // Fetch all posts matching the filter
             return await _collection.Find(filter).ToListAsync();

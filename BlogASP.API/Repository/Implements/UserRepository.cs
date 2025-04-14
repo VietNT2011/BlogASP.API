@@ -15,7 +15,7 @@ namespace BlogASP.API.Repository.Implements
 
         public async Task<User?> GetByUsernameAsync(string username)
         {
-            return await _collection.Find(Builders<User>.Filter.Eq(u => u.Username, username)).FirstOrDefaultAsync();
+            return await _collection.Find(Builders<User>.Filter.Eq(u => u.UserName, username)).FirstOrDefaultAsync();
         }
     }
 }

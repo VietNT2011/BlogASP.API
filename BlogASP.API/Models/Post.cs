@@ -15,12 +15,11 @@ namespace BlogASP.API.Models
         [BsonElement("Content")]
         public string Content { get; set; } = null!;
 
-        [BsonElement("AuthorId")]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string AuthorId { get; set; } = null!;// one to many User
+        [BsonElement("Author")]
+        public User Author { get; set; } = null!;// one to many User
 
-        [BsonElement("CategoryIds")]
-        public List<string> CategoryIds { get; set; } = new(); // many to many Category
+        [BsonElement("Categories")]
+        public List<Category> Categories { get; set; } = new(); // many to many Category
 
         [BsonElement("CreatedAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

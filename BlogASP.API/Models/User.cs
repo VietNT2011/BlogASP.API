@@ -10,13 +10,13 @@ namespace BlogASP.API.Models
         public string UserId { get; set; } = null!;
 
         [BsonElement("Username")]
-        public string Username { get; set; } = null!;
+        public string? UserName { get; set; }
 
         [BsonElement("Email")]
-        public string Email { get; set; } = null!;
+        public string? Email { get; set; }
 
         [BsonElement("PasswordHash")]
-        public string PasswordHash { get; set; } = null!;
+        public string? PasswordHash { get; set; }
 
         [BsonElement("CreatedAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

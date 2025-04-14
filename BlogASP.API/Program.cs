@@ -39,6 +39,7 @@ builder.Services.Configure<MongoDbSettings>(
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 // Add PasswordHasherHelper to DI container
 builder.Services.AddTransient<PasswordHasherHelper>();
 builder.Services.AddControllers();
@@ -46,10 +47,21 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.MapOpenApi();
     app.UseSwaggerUI(options =>
@@ -61,6 +73,9 @@ if (app.Environment.IsDevelopment())
     });
 
 }
+
+// Enable CORS middleware
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
