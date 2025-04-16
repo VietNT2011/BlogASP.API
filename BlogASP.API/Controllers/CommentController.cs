@@ -51,8 +51,9 @@ namespace BlogASP.API.Controllers
                 return BadRequest("Comment is null");
             }
 
-            await _commentRepository.CreateAsync(comment);
-            return CreatedAtAction(nameof(GetCommentsByPostIdAsync), new { postId = comment.PostId }, comment);
+            var createdComment = await _commentRepository.CreateAndReturnEntityAsync(comment);
+            //return CreatedAtAction(nameof(GetCommentsByPostIdAsync), new { postId = createdComment.PostId }, createdComment);
+            return Ok(new { Message = "Comment created successfully", Comment = createdComment });
         }
 
         // PUT api/comment/{id}

@@ -66,6 +66,16 @@ namespace BlogASP.API.Repository.Implements
             await _collection.InsertOneAsync(entity);
         }
 
+        public async Task<T> CreateAndReturnEntityAsync(T entity)
+        {
+            // Add the provided entity to the collection
+            await _collection.InsertOneAsync(entity);
+
+            // MongoDB automatically assigns the Id to the entity after insertion
+            return entity;
+        }
+
+
         // Updates an existing document by its ID
         public async Task UpdateAsync(string id, T entity)
         {

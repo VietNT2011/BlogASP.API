@@ -10,14 +10,13 @@ namespace BlogASP.API.Repository.Implements
     {
         public async Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(string postId)
         {
-            var filter = Builders<Comment>.Filter.ElemMatch(p => p.PostId, postId);
-
+            var filter = Builders<Comment>.Filter.Eq(p => p.PostId, postId);
             return await _collection.Find(filter).ToListAsync();
         }
 
         public async Task<IEnumerable<Comment>> GetCommentsByUserIdAsync(string userId)
         {
-            var filter = Builders<Comment>.Filter.ElemMatch(p=>p.Author.UserId, userId);
+            var filter = Builders<Comment>.Filter.Eq(p => p.Author.UserId, userId);
             return await _collection.Find(filter).ToListAsync();
         }
     }

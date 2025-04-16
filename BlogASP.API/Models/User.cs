@@ -18,10 +18,18 @@ namespace BlogASP.API.Models
         [BsonElement("PasswordHash")]
         public string? PasswordHash { get; set; }
 
+        [BsonElement("DOB")]
+        public DateOnly DOB { get; set; }
+
+        [BsonElement("AvatarURL")]
+        public string? AvatarURL { get; set; }
+
         [BsonElement("CreatedAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [BsonElement("Posts")]
-        public List<string> Posts { get; set; } = new(); // List Post IDs
+        [BsonElement("PasswordResetToken")]
+        public string? PasswordResetToken { get; set; }
+        [BsonElement("PasswordResetTokenExpiry")]
+        public DateTime? PasswordResetTokenExpiry { get; set; }
     }
 }

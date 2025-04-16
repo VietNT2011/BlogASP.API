@@ -8,6 +8,7 @@
         Task<T?> GetByIdAsync(string id);
         // Inserts a new document into the collection
         Task CreateAsync(T entity);
+        Task<T> CreateAndReturnEntityAsync(T entity);
         // Updates an existing document by its ID
         Task UpdateAsync(string id, T entity);
         // Deletes a document by its ID
