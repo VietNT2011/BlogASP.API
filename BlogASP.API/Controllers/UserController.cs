@@ -1,5 +1,8 @@
-﻿using BlogASP.API.Models;
+﻿using BlogASP.API.Infrastructure.Cloundinary;
+using BlogASP.API.Models;
 using BlogASP.API.Repository.Interfaces;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +13,13 @@ namespace BlogASP.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly ICloudinaryService _cloudinaryService;
 
         // Constructor injection
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, ICloudinaryService cloudinaryService)
         {
             _userRepository = userRepository;
+            _cloudinaryService = cloudinaryService;
         }
 
         //GET api/user
@@ -114,6 +119,43 @@ namespace BlogASP.API.Controllers
             await _userRepository.DeleteAsync(id);
             return NoContent();
         }
+
+        // UploadAvatar
+        [HttpPost("UploadAvatar/{userid}")]
+        public async Task<IActionResult> UploadUserAvatarAsync(string userid, IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded or file is empty.");
+            }
+            var user = await _userRepository.GetByIdAsync(userid);
+            if (user == null)
+            {
+                return NotFound($"User with ID {userid} not found.");
+            }
+
+            try
+            {
+                // Upload imagen to cloundinary
+                var uploadResult = await _cloudinaryService.UploadImageFromFileAsync(file);
+
+                if (uploadResult?.SecureUrl == null)
+                {
+                    return StatusCode(500, "Failed to upload image: No secure URL returned.");
+                }
+
+                // Update link avatar into User
+                user.AvatarURL = uploadResult.SecureUrl.ToString();
+                await _userRepository.UpdateAsync(userid, user);
+
+                return Ok(new { Message = "Avatar uploaded successfully", AvatarUrl = user.AvatarURL });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
     }
 }
 
