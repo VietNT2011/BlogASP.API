@@ -1,4 +1,5 @@
 using BlogASP.API.Helpers;
+using BlogASP.API.Infrastructure.EmailService;
 using BlogASP.API.Repository.Implements;
 using BlogASP.API.Repository.Interfaces;
 using BlogASP.API.Settings;
@@ -41,6 +42,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddTransient<IEmailService, EmailService>();
 // Add PasswordHasherHelper to DI container
 builder.Services.AddTransient<PasswordHasherHelper>();
 builder.Services.AddControllers();

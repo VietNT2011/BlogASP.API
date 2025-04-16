@@ -3,6 +3,7 @@ using MongoDB.Bson;
 
 namespace BlogASP.API.Models
 {
+    [BsonIgnoreExtraElements]
     public class User
     {
         [BsonId]
@@ -29,6 +30,7 @@ namespace BlogASP.API.Models
 
         [BsonElement("PasswordResetToken")]
         public string? PasswordResetToken { get; set; }
+
         [BsonElement("PasswordResetTokenExpiry")]
         public DateTime? PasswordResetTokenExpiry { get; set; }
     }
