@@ -10,9 +10,10 @@ namespace BlogASP.API.Infrastructure.Cloundinary
 
         public CloudinaryService()
         {
-            DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
-            var cloudinaryUrl = Environment.GetEnvironmentVariable("CLOUDINARY_URL")
-                                ?? throw new Exception("Cloudinary URL not configured");
+            //DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
+            //var cloudinaryUrl = Environment.GetEnvironmentVariable("CLOUDINARY_URL")
+            //                    ?? throw new Exception("Cloudinary URL not configured");
+            var cloudinaryUrl = "cloudinary://391985658538517:bSr2mUrDm7T6lGtACNi9nRYtYvA@dzbsqyibg";
 
             _cloudinary = new Cloudinary(cloudinaryUrl) { Api = { Secure = true } };
         }

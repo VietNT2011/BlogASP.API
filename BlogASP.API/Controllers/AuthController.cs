@@ -74,6 +74,7 @@ namespace BlogASP.API.Controllers
             {
                 UserId = user.UserId,
                 UserName = user.UserName,
+                AvatarURL = user.AvatarURL,
                 AccessToken = token,
                 ExpirationMinutes = expirationMinutes
             };

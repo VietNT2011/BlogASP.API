@@ -82,8 +82,24 @@ namespace BlogASP.API.Repository.Implements
             // Convert the string 'id' to an ObjectId before querying
             var objectId = new ObjectId(id);
 
-            // Replace the document where the '_id' matches the provided ID with the new entity
-            await _collection.ReplaceOneAsync(Builders<T>.Filter.Eq("_id", objectId), entity);
+            var updateDefinition = new List<UpdateDefinition<T>>();
+            var entityType = typeof(T);
+            var properties = entityType.GetProperties();
+
+            foreach (var property in properties)
+            {
+                var value = property.GetValue(entity);
+                if (value != null) // Bỏ qua các trường có giá trị null
+                {
+                    updateDefinition.Add(Builders<T>.Update.Set(property.Name, value));
+                }
+            }
+
+            if (updateDefinition.Any())
+            {
+                var combinedUpdate = Builders<T>.Update.Combine(updateDefinition);
+                await _collection.UpdateOneAsync(Builders<T>.Filter.Eq("_id", objectId), combinedUpdate);
+            }
         }
 
         // Deletes a document by its ID

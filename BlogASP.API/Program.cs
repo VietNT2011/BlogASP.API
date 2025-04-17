@@ -86,7 +86,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();  // Enable JWT authentication
 app.UseAuthorization();
-
+//Just only use to show error if dont have server log
+//app.UseDeveloperExceptionPage();
 app.MapControllers();
 
 app.Run();

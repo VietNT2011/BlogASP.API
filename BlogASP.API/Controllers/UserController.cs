@@ -1,15 +1,12 @@
 ﻿using BlogASP.API.Infrastructure.Cloundinary;
 using BlogASP.API.Models;
 using BlogASP.API.Repository.Interfaces;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogASP.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
@@ -88,21 +85,20 @@ namespace BlogASP.API.Controllers
         }
 
         // PUT api/user/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserAsync(string id, [FromBody] User user)
+        [HttpPut]
+        public async Task<IActionResult> UpdateUserAsync([FromBody] User user)
         {
-            if (user == null || user.UserId != id)
+            if (string.IsNullOrEmpty(user.UserId))
             {
-                return BadRequest("User data is invalid.");
+                return BadRequest("UserId is null.");
             }
-
-            var existingUser = await _userRepository.GetByIdAsync(id);
+            var existingUser = await _userRepository.GetByIdAsync(user.UserId);
             if (existingUser == null)
             {
-                return NotFound($"User with ID {id} not found.");
+                return NotFound($"User with ID {user.UserId} not found.");
             }
 
-            await _userRepository.UpdateAsync(id, user);
+            await _userRepository.UpdateAsync(user.UserId, user);
             return NoContent();
         }
 
