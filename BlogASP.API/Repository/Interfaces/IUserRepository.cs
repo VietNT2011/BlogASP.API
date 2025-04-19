@@ -6,5 +6,6 @@ namespace BlogASP.API.Repository.Interfaces
     {
         Task<User?> GetByUsernameAsync(string username);
         Task<User?> GetByEmailAsync(string email);
+        Task<bool> AddRoleToUserAsync(string userId, string roleId);
     }
 }

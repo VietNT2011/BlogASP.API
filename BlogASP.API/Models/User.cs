@@ -33,5 +33,8 @@ namespace BlogASP.API.Models
 
         [BsonElement("PasswordResetTokenExpiry")]
         public DateTime? PasswordResetTokenExpiry { get; set; }
+
+        [BsonElement("Roles")]
+        public List<Role>? Role { get; set; } = new List<Role>();
     }
 }

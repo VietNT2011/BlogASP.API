@@ -67,7 +67,7 @@ namespace BlogASP.API.Controllers
             var expirationMinutes = jwtSettings["ExpirationMinutes"]!;
 
             // Generate JWT token
-            var token = JwtTokenHelper.GenerateJwtToken(_configuration, user.UserId, user.UserName!);
+            var token = JwtTokenHelper.GenerateJwtToken(_configuration, user);
 
             // Create the response DTO
             var response = new LoginResponseDTO

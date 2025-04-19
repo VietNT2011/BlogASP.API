@@ -1,4 +1,5 @@
-﻿using BlogASP.API.Infrastructure.Cloundinary;
+﻿using BlogASP.API.DTOs;
+using BlogASP.API.Infrastructure.Cloundinary;
 using BlogASP.API.Models;
 using BlogASP.API.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -150,6 +151,17 @@ namespace BlogASP.API.Controllers
             {
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
+        }
+        [HttpPost("AddRoleToUser")]
+        public async Task<IActionResult> AddRoleToUser([FromBody] AddRoleToUserRequestDTO dto)
+        {
+            var result = await _userRepository.AddRoleToUserAsync(dto.UserId, dto.RoleId);
+            if (!result)
+            {
+                return BadRequest("Failed to add role to user.");
+            }
+
+            return Ok("Role added successfully.");
         }
 
     }
