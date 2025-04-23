@@ -1,4 +1,5 @@
-﻿using BlogASP.API.Repository.Interfaces;
+﻿using BlogASP.API.Models;
+using BlogASP.API.Repository.Interfaces;
 using BlogASP.API.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
@@ -91,6 +92,11 @@ namespace BlogASP.API.Repository.Implements
                 var value = property.GetValue(entity);
                 if (value != null) // Bỏ qua các trường có giá trị null
                 {
+                    if (property.PropertyType == typeof(List<Role>)) // Kiểm tra đặc biệt cho Role
+                    {
+                        // Giữ nguyên giá trị cũ 
+                        continue;
+                    }
                     updateDefinition.Add(Builders<T>.Update.Set(property.Name, value));
                 }
             }

@@ -48,6 +48,8 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<ICloudinaryService, CloudinaryService>();
 // Add PasswordHasherHelper to DI container
 builder.Services.AddTransient<PasswordHasherHelper>();
+
+
 builder.Services.AddControllers();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
