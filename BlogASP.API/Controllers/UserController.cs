@@ -33,6 +33,19 @@ namespace BlogASP.API.Controllers
             return Ok(users);
         }
 
+        // GET api/user/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetUserByIdAsync(string id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound($"User with ID {id} not found.");
+            }
+
+            return Ok(user);
+        }
+
         // GET api/user/{email}
         [HttpGet("email/{email}")]
         public async Task<ActionResult<User>> GetUserByEmailAsync(string email)
@@ -152,6 +165,7 @@ namespace BlogASP.API.Controllers
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
         [HttpPost("AddRoleToUser")]
         public async Task<IActionResult> AddRoleToUser([FromBody] AddRoleToUserRequestDTO dto)
         {

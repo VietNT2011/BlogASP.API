@@ -144,6 +144,22 @@ namespace BlogASP.API.Controllers
 
             return Ok("Password has been reset successfully.");
         }
+
+        [HttpPost("RenewPassword")]
+        public async Task<IActionResult> RenewPassword(RenewPasswordRequestDTO model)
+        {
+            var user = await _userRepository.GetByIdAsync(model.UserId!);
+            if (user == null)
+            {
+                return BadRequest("User with this id does not exist.");
+            }
+            // Hash the new password
+            var hashedPassword = _passwordHasherHelper.HashPassword(model.NewPassword!);
+            user.PasswordHash = hashedPassword;
+            await _userRepository.UpdateAsync(user.UserId, user);
+            return Ok("Password has been renew successfully.");
+        }
+
         //ChangePassword API
         [HttpPost("ChangePassword")]
         public async Task<IActionResult> ChangePassword(ChangePasswordRequestDTO model)

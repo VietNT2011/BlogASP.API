@@ -1,6 +1,7 @@
-﻿using BlogASP.API.Models;
+﻿using BlogASP.API.Infrastructure.Cloundinary;
+using BlogASP.API.Models;
+using BlogASP.API.Repository.Implements;
 using BlogASP.API.Repository.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogASP.API.Controllers
@@ -10,10 +11,12 @@ namespace BlogASP.API.Controllers
     public class PostController : ControllerBase
     {
         private readonly IPostRepository _postRepository;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public PostController(IPostRepository postRepository)
+        public PostController(IPostRepository postRepository, ICloudinaryService cloudinaryService)
         {
             _postRepository = postRepository;
+            _cloudinaryService = cloudinaryService;
         }
 
         // GET: api/Post
@@ -69,6 +72,47 @@ namespace BlogASP.API.Controllers
 
             await _postRepository.UpdateAsync(id, updatedPost);
             return NoContent();
+        }
+        // PUT: api/Post/{id}
+        [HttpPut("UpdatePostThumbail/{id}")]
+        public async Task<IActionResult> UpdatePostThumbail(string id, IFormFile file)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Post ID is empty!");
+            }
+
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded or file is empty.");
+            }
+            var existingPost = await _postRepository.GetByIdAsync(id);
+
+            if (existingPost == null)
+            {
+                return NotFound($"Post with ID {id} not found.");
+            }
+
+            try
+            {
+                // Upload imagen to cloundinary
+                var uploadResult = await _cloudinaryService.UploadImageFromFileAsync(file);
+
+                if (uploadResult?.SecureUrl == null)
+                {
+                    return StatusCode(500, "Failed to upload image: No secure URL returned.");
+                }
+
+                // Update link avatar into User
+                existingPost.ThumbailURL = uploadResult.SecureUrl.ToString();
+                await _postRepository.UpdateAsync(id, existingPost);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
         }
 
         // DELETE: api/Post/{id}

@@ -26,5 +26,8 @@ namespace BlogASP.API.Models
 
         [BsonElement("UpdatedAt")]
         public DateTime? UpdatedAt { get; set; }
+
+        [BsonElement("ThumbailURL")]
+        public string? ThumbailURL { get; set; }
     }
 }
